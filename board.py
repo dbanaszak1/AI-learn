@@ -1,10 +1,11 @@
 import random
 import pygame
 from trash_truck import TrashTruck
+from coordinates import Coordinates
 from house import House
 
 
-STARTING_COORDINATES = (0, 0)
+STARTING_COORDINATES = Coordinates(0, 0)
 PATH_TO_TRASH_TRUCK_IMAGE = "assets/images/trash_truck.png"
 PATH_TO_HOUSE_IMAGE = "assets/images/house.png"
 TRUCK_SIZE = (25, 25)
@@ -28,9 +29,9 @@ class Board:
         for _ in range(random.randint(int(BLOCK_SIZE / 2), BLOCK_SIZE)):
             x = random.randint(0, BLOCK_SIZE) * TRUCK_SIZE[0]
             y = random.randint(0, BLOCK_SIZE) * TRUCK_SIZE[0]
-            if (x == 0 and y == 0) or (x == 25 and y == 0) or (x == 0 and y == 25):
+            if x <= 50 and y <= 50:
                 continue
-            self.houses.append(House(x, y))
+            self.houses.append(House(Coordinates(x,y)))
 
     def draw_window(self):
         self.WINDOW.fill(COLOR_FILL)

@@ -5,7 +5,7 @@ import datetime
 # TODO: proper inheritance
 
 class TrashCan:
-    def __init__(self, color, expectedTrash, photo):
+    def __init__(self, color: (int, int, int), expectedTrash: str, photo: str):
         self.color = color
         self.expectedTrash = expectedTrash
         self.photo = photo

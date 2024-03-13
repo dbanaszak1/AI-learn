@@ -1,19 +1,19 @@
 import random
 import pygame
-import keyboard
+from trash_truck import TrashTruck
 from house import House
 
-# TODO: truck movement
 
-STARTING_POSITION = (0, 0)
+STARTING_COORDINATES = (0, 0)
 PATH_TO_TRASH_TRUCK_IMAGE = "assets/images/trash_truck.png"
 PATH_TO_HOUSE_IMAGE = "assets/images/house.png"
 TRUCK_SIZE = (25, 25)
 COLOR_FILL = (100, 100, 100)
 LINE_COLOR = (0, 0, 0)
 WIDTH, HEIGHT = 800, 800
+BLOCK_SIZE = int(WIDTH / TRUCK_SIZE[0])
 FPS = 60
-speed = [1, 1]
+
 
 class Board:
     def __init__(self):
@@ -22,18 +22,19 @@ class Board:
         self.WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
         self.FPS = FPS
         self.clock = pygame.time.Clock()
-        self.TRASH_TRUCK_IMAGE = pygame.image.load(PATH_TO_TRASH_TRUCK_IMAGE)
-        self.TRASH_TRUCK = pygame.transform.scale(self.TRASH_TRUCK_IMAGE, TRUCK_SIZE)
+        self.trash_truck = TrashTruck(PATH_TO_TRASH_TRUCK_IMAGE, TRUCK_SIZE, STARTING_COORDINATES)
         self.houses = []
 
-        num_houses = random.randint(20, 40)
-        for _ in range(num_houses):
-            x = random.randint(0, 31) * 25
-            y = random.randint(0, 31) * 25
+        for _ in range(random.randint(int(BLOCK_SIZE / 2), BLOCK_SIZE)):
+            x = random.randint(0, BLOCK_SIZE) * TRUCK_SIZE[0]
+            y = random.randint(0, BLOCK_SIZE) * TRUCK_SIZE[0]
+            if (x == 0 and y == 0) or (x == 25 and y == 0) or (x == 0 and y == 25):
+                continue
             self.houses.append(House(x, y))
 
-    def drawWindow(self):
+    def draw_window(self):
         self.WINDOW.fill(COLOR_FILL)
+        self.trash_truck.draw(self.WINDOW)
 
         for i in range(0, WIDTH, TRUCK_SIZE[0]):
             pygame.draw.line(self.WINDOW, LINE_COLOR, (i, 0), (i, HEIGHT))
@@ -41,10 +42,7 @@ class Board:
             pygame.draw.line(self.WINDOW, LINE_COLOR, (0, j), (WIDTH, j))
 
         for house in self.houses:
-            house.generateTrashcans()
             house.draw(self.WINDOW)
-
-        self.WINDOW.blit(self.TRASH_TRUCK, STARTING_POSITION)
 
         pygame.display.update()
 
@@ -56,6 +54,8 @@ class Board:
                 if event.type == pygame.QUIT:
                     run = False
 
-            self.drawWindow()
+            keys = pygame.key.get_pressed()
+            self.trash_truck.move(keys, self.houses)
+            self.draw_window()
 
         pygame.quit()

@@ -1,8 +1,8 @@
 import pygame
 import datetime
 
-
 # TODO: proper inheritance
+
 
 class TrashCan:
     def __init__(self, color: (int, int, int), expectedTrash: str, photo: str):

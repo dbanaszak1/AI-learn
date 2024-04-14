@@ -25,25 +25,48 @@ class TrashCan:
 
 
 class YellowTrashCan(TrashCan):
-    def __init__(self, expectedTrash, photo):
-        super().__init__((255, 255, 0), "plastic", 'assets/images/yellowBin.png')
+    def __init__(self, expectedTrash=None, photo=None):
+        if expectedTrash is None:
+            expectedTrash = "plastic"
+        if photo is None:
+            photo = 'assets/images/yellowBin.png'
+        super().__init__((255, 255, 0), expectedTrash, photo)
 
 
 class BlueTrashCan(TrashCan):
-    def __init__(self, expectedTrash, photo):
-        super().__init__((0, 0, 255), "paper", 'assets/images/blueBin.png')
-
-
-class GreenTrashCan(TrashCan):
-    def __init__(self, expectedTrash, photo):
-        super().__init__((0, 255, 0), "glass", 'assets/images/greenBin.png')
+    def __init__(self, expectedTrash=None, photo=None):
+        if expectedTrash is None:
+            expectedTrash = "paper"
+        if photo is None:
+            photo = 'assets/images/blueBin.png'
+        super().__init__((0, 0, 255), expectedTrash, photo)
 
 
 class BrownTrashCan(TrashCan):
-    def __init__(self, expectedTrash, photo):
-        super().__init__((165, 42, 42), "BIO", 'assets/images/brownBin.png')
+    def __init__(self, expectedTrash=None, photo=None):
+        if expectedTrash is None:
+            expectedTrash = "BIO"
+        if photo is None:
+            photo = 'assets/images/brownBin.png'
+        super().__init__((165, 42, 42), expectedTrash, photo)
 
 
 class RedTrashCan(TrashCan):
-    def __init__(self, expectedTrash, photo):
-        super().__init__((255, 0, 0), "mixed", 'assets/images/redBin.png')
+    def __init__(self, expectedTrash=None, photo=None):
+        if expectedTrash is None:
+            expectedTrash = "mixed"
+        if photo is None:
+            photo = 'assets/images/redBin.png'
+        super().__init__((255, 0, 0), expectedTrash, photo)
+
+
+class GreenTrashCan(TrashCan):
+    def __init__(self, expectedTrash=None, photo=None):
+        if expectedTrash is None:
+            expectedTrash = "glass"
+        if photo is None:
+            photo = 'assets/images/greenBin.png'
+        super().__init__((0, 255, 0), expectedTrash, photo)
+
+
+

@@ -29,7 +29,7 @@ class YellowTrashCan(TrashCan):
         if expectedTrash is None:
             expectedTrash = "plastic"
         if photo is None:
-            photo = 'assets/images/yellowBin.png'
+            photo = 'assets/images/trash-can-yellow.png'
         super().__init__((255, 255, 0), expectedTrash, photo)
 
 
@@ -38,7 +38,7 @@ class BlueTrashCan(TrashCan):
         if expectedTrash is None:
             expectedTrash = "paper"
         if photo is None:
-            photo = 'assets/images/blueBin.png'
+            photo = 'assets/images/trash-can-blue.png'
         super().__init__((0, 0, 255), expectedTrash, photo)
 
 
@@ -47,7 +47,7 @@ class BrownTrashCan(TrashCan):
         if expectedTrash is None:
             expectedTrash = "BIO"
         if photo is None:
-            photo = 'assets/images/brownBin.png'
+            photo = 'assets/images/trash-can-brown.png'
         super().__init__((165, 42, 42), expectedTrash, photo)
 
 
@@ -56,7 +56,7 @@ class RedTrashCan(TrashCan):
         if expectedTrash is None:
             expectedTrash = "mixed"
         if photo is None:
-            photo = 'assets/images/redBin.png'
+            photo = 'assets/images/trash-can-red.png'
         super().__init__((255, 0, 0), expectedTrash, photo)
 
 
@@ -65,34 +65,6 @@ class GreenTrashCan(TrashCan):
         if expectedTrash is None:
             expectedTrash = "glass"
         if photo is None:
-            photo = 'assets/images/greenBin.png'
+            photo = 'assets/images/trash-can-green.png'
         super().__init__((0, 255, 0), expectedTrash, photo)
 
-
-    def __init__(self, expectedTrash, photo):
-        super().__init__((255, 255, 0), "plastic", 'assets/images/trash-can-yellow.png')
-
-
-class BlueTrashCan(TrashCan):
-    def __init__(self, expectedTrash, photo):
-        super().__init__((0, 0, 255), "paper", 'assets/images/trash-can-blue.png')
-
-
-class GreenTrashCan(TrashCan):
-    def __init__(self, expectedTrash, photo):
-        super().__init__((0, 255, 0), "glass", 'assets/images/trash-can-green.png')
-
-
-class BrownTrashCan(TrashCan):
-    def __init__(self, expectedTrash, photo):
-        super().__init__((165, 42, 42), "BIO", 'assets/images/trash-can-brown.png')
-
-
-class RedTrashCan(TrashCan):
-    def __init__(self, expectedTrash, photo):
-        super().__init__((255, 0, 0), "mixed", 'assets/images/trash-can-red.png')
-
-
-class RedTrashCan(TrashCan):
-    def __init__(self, expectedTrash, photo):
-        super().__init__((255, 0, 0), "mixed", 'assets/images/trash-can-black.png')

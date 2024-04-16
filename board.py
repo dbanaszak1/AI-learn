@@ -47,7 +47,7 @@ class Board:
 
         pygame.display.update()
 
-    def main(self):
+    async def main(self):
         run = True
         while run:
             self.clock.tick(self.FPS)
@@ -56,7 +56,7 @@ class Board:
                     run = False
 
             keys = pygame.key.get_pressed()
-            self.trash_truck.move(keys, self.houses)
+            await self.trash_truck.move(keys, self.houses)
             self.draw_window()
 
         pygame.quit()

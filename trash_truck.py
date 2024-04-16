@@ -1,32 +1,50 @@
 import pygame
-from coordinates import Coordinates, check_collision
-
+from coordinates import Coordinates, check_collision, Directions
+import asyncio
 
 class TrashTruck:
-    def __init__(self, image_path: str, size: (int, int), coordinates: Coordinates):
+    def __init__(self, image_path: str, size: (int, int), coordinates: Coordinates, direction: Directions = Directions.RIGHT.value):
         self.original_image = pygame.image.load(image_path)
         self.image = pygame.transform.scale(self.original_image, size)
         self.coordinates = coordinates
         self.size = size
-        self.rotation = 0
-        self.flip = False
+        self.rotation = self.calc_rotation(self.coordinates.direction)
+        self.flip = self.check_flip(self.coordinates.direction)
 
-    def move(self, key_pressed, houses: []):
+    async def move(self, key_pressed, houses: []):
         directions = {
             # Key_Pressed : ( Coordinates, Rotation, Flip)
-            pygame.K_LEFT: (self.coordinates.move_left(), 0, True),
-            pygame.K_RIGHT: (self.coordinates.move_right(), 0, False),
-            pygame.K_UP: (self.coordinates.move_up(), 90, False),
-            pygame.K_DOWN: (self.coordinates.move_down(), 270, False)
+            pygame.K_LEFT: (self.coordinates.rotate_left()),
+            pygame.K_RIGHT: (self.coordinates.rotate_right()),
+            pygame.K_UP: (self.coordinates.move_forward()),
         }
 
-        for key, (coordinates, rotation, flip) in directions.items():
+        for key, (coordinates) in directions.items():
             if key_pressed[key]:
                 if not check_collision(truck_coordinates=coordinates, houses=houses):
                     self.coordinates = coordinates
-                    self.rotation = rotation
-                    self.flip = flip
+                    self.rotation =  self.calc_rotation(self.coordinates.direction)
+                    self.flip =  self.check_flip(self.coordinates.direction)
+                    await asyncio.sleep(0.15)
+                    # print("direction: ", self.coordinates.direction)
+                    # print("rotation: ", self.rotation)
+                    # print("flip: ", self.flip)
+                    # print("x: ", self.coordinates.x)
+                    # print("y: ", self.coordinates.y)
                     break
+
+    def calc_rotation(self, direction):
+        if direction == Directions.UP.value:
+            return 90
+        elif direction == Directions.DOWN.value:
+            return 270
+        elif direction == Directions.LEFT.value:
+            return 180
+        else:
+            return 0
+
+    def check_flip(self, direction):
+        return direction == Directions.LEFT.value
 
     def draw(self, window):
         if not self.flip:

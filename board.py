@@ -6,7 +6,7 @@ from house import House
 
 
 STARTING_COORDINATES = Coordinates(0, 0)
-PATH_TO_TRASH_TRUCK_IMAGE = "assets/images/trash_truck.png"
+PATH_TO_TRASH_TRUCK_IMAGE = "assets/images/trash-truck.png"
 PATH_TO_HOUSE_IMAGE = "assets/images/house.png"
 TRUCK_SIZE = (25, 25)
 COLOR_FILL = (100, 100, 100)

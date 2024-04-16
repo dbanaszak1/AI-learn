@@ -25,8 +25,3 @@ class BioTrash(Trash):
 class GlassTrash(Trash):
     def __init__(self):
         super().__init__("glass")
-
-class GarbageDump:
-    def __init__(self):
-        self.trash = []
-

@@ -1,6 +1,7 @@
 from board import Board
+import asyncio
 
 board = Board()
 
 if __name__ == "__main__":
-    board.main()
+    asyncio.run(board.main())

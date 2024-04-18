@@ -34,6 +34,7 @@ class Board:
             self.houses.append(House(Coordinates(x,y)))
 
     def draw_window(self):
+        self.clock.tick(self.FPS)
         self.WINDOW.fill(COLOR_FILL)
         self.trash_truck.draw(self.WINDOW)
 
@@ -54,6 +55,12 @@ class Board:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        await self.trash_truck.follow_path(self.houses, self.draw_window, (550, 450))
+                        await self.trash_truck.follow_path(self.houses, self.draw_window, (225, 125))
+                        await self.trash_truck.follow_path(self.houses, self.draw_window, (750, 525))
+                        await self.trash_truck.follow_path(self.houses, self.draw_window, (125, 750))
 
             keys = pygame.key.get_pressed()
             await self.trash_truck.move(keys, self.houses)

@@ -1,5 +1,5 @@
 import pygame
-from coordinates import Coordinates, check_collision
+from main.coordinates import Coordinates
 from incinerator import Incinerator
 
 

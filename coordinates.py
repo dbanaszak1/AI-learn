@@ -46,6 +46,7 @@ class Coordinates:
             return Coordinates(self.x + SQUARE_SIZE, self.y, self.direction)
         return Coordinates(self.x, self.y, self.direction)
 
+
 def check_collision(truck_coordinates: Coordinates, houses: []):
     for house in houses:
         if truck_coordinates.x == house.coordinates.x and truck_coordinates.y == house.coordinates.y:

@@ -1,13 +1,14 @@
 import random
 import pygame
-from trash_truck import TrashTruck
+from models.trash_truck import TrashTruck
 from coordinates import Coordinates
-from house import House
+from models.house import House
+from gui.board_one import BoardOne
+from gui.board_two import BoardTwo
 
+boards = [BoardOne, BoardTwo]
 
 STARTING_COORDINATES = Coordinates(0, 0)
-PATH_TO_TRASH_TRUCK_IMAGE = "assets/images/trash-truck.png"
-PATH_TO_HOUSE_IMAGE = "assets/images/house.png"
 TRUCK_SIZE = (25, 25)
 COLOR_FILL = (100, 100, 100)
 LINE_COLOR = (0, 0, 0)
@@ -23,7 +24,7 @@ class Board:
         self.WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
         self.FPS = FPS
         self.clock = pygame.time.Clock()
-        self.trash_truck = TrashTruck(PATH_TO_TRASH_TRUCK_IMAGE, TRUCK_SIZE, STARTING_COORDINATES)
+        self.trash_truck = TrashTruck(TRUCK_SIZE, STARTING_COORDINATES)
         self.houses = []
 
         for _ in range(random.randint(int(BLOCK_SIZE / 2), BLOCK_SIZE)):
@@ -43,12 +44,15 @@ class Board:
         for j in range(0, HEIGHT, TRUCK_SIZE[1]):
             pygame.draw.line(self.WINDOW, LINE_COLOR, (0, j), (WIDTH, j))
 
+        board = boards[random.randint(0, len(boards) - 1)]
+
         for house in self.houses:
             house.draw(self.WINDOW)
 
         pygame.display.update()
 
     async def main(self):
+
         run = True
         while run:
             self.clock.tick(self.FPS)

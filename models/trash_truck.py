@@ -1,5 +1,5 @@
 import pygame
-from coordinates import Coordinates, check_collision, Directions, SQUARE_SIZE, WIDTH, HEIGHT
+from main.coordinates import Coordinates, check_collision, Directions, SQUARE_SIZE, WIDTH, HEIGHT
 import asyncio
 from collections import deque
 

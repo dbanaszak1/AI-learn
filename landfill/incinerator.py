@@ -4,8 +4,8 @@ import sys
 import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from main.coordinates import Coordinates
-from main.models.trashtype import PaperTrash, MixedTrash
+from coordinates import Coordinates
+from models.trashtype import PaperTrash, MixedTrash
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

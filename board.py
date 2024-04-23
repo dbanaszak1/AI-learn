@@ -1,14 +1,12 @@
 import random
 import pygame
 from models.trash_truck import TrashTruck
-from coordinates import Coordinates
+from coordinates import Coordinates, Directions
 from models.house import House
-from gui.board_one import BoardOne
-from gui.board_two import BoardTwo
+from gui.board_one import draw_road_one
+from gui.board_two import draw_road_two
 
-boards = [BoardOne, BoardTwo]
-
-STARTING_COORDINATES = Coordinates(0, 0)
+STARTING_COORDINATES = Coordinates(50, 125)
 TRUCK_SIZE = (25, 25)
 COLOR_FILL = (100, 100, 100)
 LINE_COLOR = (0, 0, 0)
@@ -24,9 +22,36 @@ class Board:
         self.WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
         self.FPS = FPS
         self.clock = pygame.time.Clock()
-        self.trash_truck = TrashTruck(TRUCK_SIZE, STARTING_COORDINATES)
+        self.trash_truck = TrashTruck(size=TRUCK_SIZE, coordinates=STARTING_COORDINATES, direction=Directions.LEFT.value)
         self.houses = []
 
+    def draw_window(self):
+        self.clock.tick(self.FPS)
+        self.WINDOW.fill(COLOR_FILL)
+        self.draw_roads()
+        self.draw_objects()
+
+        pygame.display.update()
+
+    def draw_roads(self):
+        for i in range(0, WIDTH, TRUCK_SIZE[0]):
+            pygame.draw.line(self.WINDOW, LINE_COLOR, (i, 0), (i, HEIGHT))
+        for j in range(0, HEIGHT, TRUCK_SIZE[1]):
+            pygame.draw.line(self.WINDOW, LINE_COLOR, (0, j), (WIDTH, j))
+
+        roads = [draw_road_one(self.WINDOW, STARTING_COORDINATES, BLOCK_SIZE),
+                 draw_road_two(self.WINDOW, STARTING_COORDINATES, BLOCK_SIZE)]
+        var = roads[random.randint(0, len(roads) - 1)]
+
+    def draw_objects(self):
+        self.trash_truck.draw(self.WINDOW)
+        # TODO Create incinerator object
+        incinerator = pygame.image.load("assets/images/incinerator.png")
+        incinerator = pygame.transform.scale(incinerator, (100, 100))
+        self.WINDOW.blit(incinerator, (50, 25))
+        pygame.display.update()
+
+    def generate_houses(self):
         for _ in range(random.randint(int(BLOCK_SIZE / 2), BLOCK_SIZE)):
             x = random.randint(0, BLOCK_SIZE) * TRUCK_SIZE[0]
             y = random.randint(0, BLOCK_SIZE) * TRUCK_SIZE[0]
@@ -34,22 +59,8 @@ class Board:
                 continue
             self.houses.append(House(Coordinates(x,y)))
 
-    def draw_window(self):
-        self.clock.tick(self.FPS)
-        self.WINDOW.fill(COLOR_FILL)
-        self.trash_truck.draw(self.WINDOW)
-
-        for i in range(0, WIDTH, TRUCK_SIZE[0]):
-            pygame.draw.line(self.WINDOW, LINE_COLOR, (i, 0), (i, HEIGHT))
-        for j in range(0, HEIGHT, TRUCK_SIZE[1]):
-            pygame.draw.line(self.WINDOW, LINE_COLOR, (0, j), (WIDTH, j))
-
-        board = boards[random.randint(0, len(boards) - 1)]
-
         for house in self.houses:
             house.draw(self.WINDOW)
-
-        pygame.display.update()
 
     async def main(self):
 
@@ -62,12 +73,13 @@ class Board:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         await self.trash_truck.follow_path(self.houses, self.draw_window, (550, 450))
-                        await self.trash_truck.follow_path(self.houses, self.draw_window, (225, 125))
-                        await self.trash_truck.follow_path(self.houses, self.draw_window, (750, 525))
-                        await self.trash_truck.follow_path(self.houses, self.draw_window, (125, 750))
+                        # await self.trash_truck.follow_path(self.houses, board_instance.draw_window, (225, 125))
+                        # await self.trash_truck.follow_path(self.houses, board_instance.draw_window, (750, 525))
+                        # await self.trash_truck.follow_path(self.houses, board_instance.draw_window, (125, 750))
 
             keys = pygame.key.get_pressed()
             await self.trash_truck.move(keys, self.houses)
             self.draw_window()
+            pygame.display.update()
 
         pygame.quit()

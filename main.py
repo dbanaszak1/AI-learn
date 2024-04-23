@@ -1,4 +1,4 @@
-from gui.board import Board
+from board import Board
 import asyncio
 
 board = Board()

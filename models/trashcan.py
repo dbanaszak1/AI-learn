@@ -3,6 +3,7 @@ import datetime
 
 # TODO: proper inheritance
 
+IMAGES_PATH = "./assets/images/"
 
 class TrashCan:
     def __init__(self, color: (int, int, int), expectedTrash: str, photo: str):
@@ -29,7 +30,7 @@ class YellowTrashCan(TrashCan):
         if expectedTrash is None:
             expectedTrash = "plastic"
         if photo is None:
-            photo = 'assets/images/trash-can-yellow.png'
+            photo = IMAGES_PATH + 'trash-can-yellow.png'
         super().__init__((255, 255, 0), expectedTrash, photo)
 
 
@@ -38,7 +39,7 @@ class BlueTrashCan(TrashCan):
         if expectedTrash is None:
             expectedTrash = "paper"
         if photo is None:
-            photo = 'assets/images/trash-can-blue.png'
+            photo = IMAGES_PATH + 'trash-can-blue.png'
         super().__init__((0, 0, 255), expectedTrash, photo)
 
 
@@ -47,7 +48,7 @@ class BrownTrashCan(TrashCan):
         if expectedTrash is None:
             expectedTrash = "BIO"
         if photo is None:
-            photo = 'assets/images/trash-can-brown.png'
+            photo = IMAGES_PATH + 'trash-can-brown.png'
         super().__init__((165, 42, 42), expectedTrash, photo)
 
 
@@ -56,7 +57,7 @@ class RedTrashCan(TrashCan):
         if expectedTrash is None:
             expectedTrash = "mixed"
         if photo is None:
-            photo = 'assets/images/trash-can-red.png'
+            photo = IMAGES_PATH + 'trash-can-red.png'
         super().__init__((255, 0, 0), expectedTrash, photo)
 
 
@@ -65,6 +66,6 @@ class GreenTrashCan(TrashCan):
         if expectedTrash is None:
             expectedTrash = "glass"
         if photo is None:
-            photo = 'assets/images/trash-can-green.png'
+            photo = IMAGES_PATH + 'trash-can-green.png'
         super().__init__((0, 255, 0), expectedTrash, photo)
 

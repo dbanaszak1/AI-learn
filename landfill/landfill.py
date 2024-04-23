@@ -1,5 +1,5 @@
 import pygame
-from main.coordinates import Coordinates
+from coordinates import Coordinates
 from incinerator import Incinerator
 
 

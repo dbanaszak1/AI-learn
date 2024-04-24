@@ -3,14 +3,16 @@ from enum import Enum
 WIDTH, HEIGHT = 800, 800
 SQUARE_SIZE = 25
 
+
 class Directions(Enum):
     UP = "up"
     DOWN = "down"
     LEFT = "left"
     RIGHT = "right"
 
+
 class Coordinates:
-    def __init__(self, x: int, y: int, direction: Directions = Directions.RIGHT.value):
+    def __init__(self, x: int, y: int, direction=Directions.DOWN.value):
         self.x = x
         self.y = y
         self.direction = direction

@@ -9,8 +9,7 @@ PATH_TO_TRASH_TRUCK_IMAGE = os.path.join(current_directory, "assets", "images", 
 
 
 class TrashTruck:
-    def __init__(self, size: (int, int), coordinates: Coordinates,
-                 direction: Directions = Directions.RIGHT.value):
+    def __init__(self, size: (int, int), coordinates: Coordinates):
         self.original_image = pygame.image.load(PATH_TO_TRASH_TRUCK_IMAGE)
         self.image = pygame.transform.scale(self.original_image, size)
         self.coordinates = coordinates
@@ -40,16 +39,15 @@ class TrashTruck:
                     # print("y: ", self.coordinates.y)
                     break
 
-    async def follow_path(self, houses, drawWindow, target):
-        path = find_shortest_path(self.coordinates, houses, target)
+    async def follow_path(self, houses, drawWindow, target, roads):
+        path = find_shortest_path(self.coordinates, houses, target, roads)
         if path:
             for next_square in path:
-                print("Test")
                 self.coordinates.direction = move_direction(self.coordinates, Coordinates(next_square[0], next_square[1]))
                 self.rotation = calc_rotation(self.coordinates.direction)
                 self.flip = check_flip(self.coordinates.direction)
                 self.coordinates = Coordinates(next_square[0], next_square[1])
-                await asyncio.sleep(0.15)
+                await asyncio.sleep(0.075)
                 drawWindow()
 
     def draw(self, window):

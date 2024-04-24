@@ -14,7 +14,7 @@ def move_direction(start_coordinates, end_coordinates):
         return Directions.DOWN.value
 
 
-def find_shortest_path(coordinates: Coordinates, houses, target):
+def find_shortest_path(coordinates: Coordinates, houses, target, roads):
     start = (coordinates.x, coordinates.y)
     visited = set()
     queue = deque([[start]])
@@ -30,6 +30,8 @@ def find_shortest_path(coordinates: Coordinates, houses, target):
                           Directions.RIGHT.value]:
             neighbour = get_neighbour(current, direction)
             if neighbour[0] < 0 or neighbour[0] > WIDTH or neighbour[1] < 0 or neighbour[1] > HEIGHT:
+                continue
+            if neighbour not in roads:
                 continue
             if (neighbour not in visited and
                     not check_collision(truck_coordinates=Coordinates(neighbour[0], neighbour[1]), houses=houses)):

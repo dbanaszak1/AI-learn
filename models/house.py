@@ -1,11 +1,16 @@
 import pygame
-from trashcan import YellowTrashCan, BlueTrashCan, BrownTrashCan, GreenTrashCan, RedTrashCan
+import os
+from .trashcan import YellowTrashCan, BlueTrashCan, BrownTrashCan, GreenTrashCan, RedTrashCan
 from coordinates import Coordinates
 import random
 
 HOUSE_SIZE = (25, 25)
 TRASHCAN_OFFSET = 50
 TRASHCAN_SIZE = (15, 15)
+
+current_directory = os.getcwd()
+PATH_TO_HOUSE_IMAGE = os.path.join(current_directory, "assets", "images", "house.png")
+
 
 class House:
     def __init__(self, coordinates: Coordinates):
@@ -31,7 +36,7 @@ class House:
 
     def draw(self, surface):
         # House draw
-        house_image = pygame.image.load("assets/images/house.png")
+        house_image = pygame.image.load(PATH_TO_HOUSE_IMAGE)
         house_image = pygame.transform.scale(house_image, HOUSE_SIZE)
         surface.blit(house_image, (self.coordinates.x, self.coordinates.y))
 
@@ -40,5 +45,3 @@ class House:
             trash_image = pygame.image.load(trash_can.photo)
             trash_image = pygame.transform.scale(trash_image, TRASHCAN_SIZE)
             surface.blit(trash_image, (coordinates.x, coordinates.y))
-
-

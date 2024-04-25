@@ -5,7 +5,7 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from coordinates import Coordinates
-from trashtype import Trash, GlassTrash, PaperTrash, BioTrash, MixedTrash, PlasticTrash, MetalTrash
+from models.trashtype import PaperTrash, MixedTrash
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

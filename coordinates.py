@@ -5,17 +5,22 @@ SQUARE_SIZE = 25
 
 
 class Directions(Enum):
-    UP = "up"
-    DOWN = "down"
-    LEFT = "left"
-    RIGHT = "right"
-
+    UP = 0
+    DOWN = 2
+    LEFT = 1
+    RIGHT = 3
 
 class Coordinates:
-    def __init__(self, x: int, y: int, direction=Directions.DOWN.value):
+    def __init__(self, x: int = 0, y: int = 0, direction: Directions = Directions.DOWN):
         self.x = x
         self.y = y
         self.direction = direction
+        self.f = float('inf')  # Total cost of the cell (g + h)
+        self.g = float('inf')  # Cost from start to this cell
+        self.h = 0  # Heuristic cost from this cell to destination
+        self.parent_x = -1
+        self.parent_y = -1
+        self.parent_dir = Directions.DOWN
 
     def rotate_left(self):
         if self.direction == Directions.UP.value:
@@ -49,7 +54,7 @@ class Coordinates:
         return Coordinates(self.x, self.y, self.direction)
 
 
-def check_collision(truck_coordinates: Coordinates, houses: []):
+def check_collision(truck_coordinates: Coordinates, houses):
     for house in houses:
         if truck_coordinates.x == house.coordinates.x and truck_coordinates.y == house.coordinates.y:
             return True

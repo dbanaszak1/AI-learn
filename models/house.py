@@ -41,7 +41,9 @@ class House:
         surface.blit(house_image, (self.coordinates.x, self.coordinates.y))
 
         # Cans draw
+        '''
         for trash_can, coordinates in self.trash_cans.items():
             trash_image = pygame.image.load(trash_can.photo)
             trash_image = pygame.transform.scale(trash_image, TRASHCAN_SIZE)
             surface.blit(trash_image, (coordinates.x, coordinates.y))
+        '''

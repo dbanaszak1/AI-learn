@@ -2,14 +2,14 @@ import pygame
 import os
 from coordinates import Coordinates, check_collision, Directions, SQUARE_SIZE, WIDTH, HEIGHT
 import asyncio
-from utils.utils import move_direction, find_shortest_path, get_neighbour, check_flip, calc_rotation
+from utils.utils import move_direction, find_shortest_path, get_neighbour, check_flip, calc_rotation, a_star_search
 
 current_directory = os.getcwd()
 PATH_TO_TRASH_TRUCK_IMAGE = os.path.join(current_directory, "assets", "images", "trash-truck.png")
 
 
 class TrashTruck:
-    def __init__(self, size: (int, int), coordinates: Coordinates):
+    def __init__(self, size, coordinates: Coordinates):
         self.original_image = pygame.image.load(PATH_TO_TRASH_TRUCK_IMAGE)
         self.image = pygame.transform.scale(self.original_image, size)
         self.coordinates = coordinates
@@ -17,7 +17,7 @@ class TrashTruck:
         self.rotation = calc_rotation(self.coordinates.direction)
         self.flip = check_flip(self.coordinates.direction)
 
-    async def move(self, key_pressed, houses: []):
+    async def move(self, key_pressed, houses):
         directions = {
             # Key_Pressed : ( Coordinates, Rotation, Flip)
             pygame.K_LEFT: (self.coordinates.rotate_left()),
@@ -40,6 +40,7 @@ class TrashTruck:
                     break
 
     async def follow_path(self, houses, drawWindow, target, roads):
+        '''
         path = find_shortest_path(self.coordinates, houses, target, roads)
         if path:
             for next_square in path:
@@ -49,6 +50,10 @@ class TrashTruck:
                 self.coordinates = Coordinates(next_square[0], next_square[1])
                 await asyncio.sleep(0.075)
                 drawWindow()
+        '''
+        for house in houses :
+            a_star_search(self.coordinates, house.coordinates)
+            self.coordinates = house.coordinates
 
     def draw(self, window):
         if not self.flip:

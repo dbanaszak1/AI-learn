@@ -1,8 +1,8 @@
 from enum import Enum
+from gui.grid_one import GRID_ONE
 
 WIDTH, HEIGHT = 800, 800
 SQUARE_SIZE = 25
-
 
 class Directions(Enum):
     UP = 0
@@ -21,6 +21,9 @@ class Coordinates:
         self.parent_x = -1
         self.parent_y = -1
         self.parent_dir = Directions.DOWN
+        self.x_grid = int(self.x/25)
+        self.y_grid = int(self.y/25)
+        self.cost = GRID_ONE[self.x_grid][self.y_grid]
 
     def rotate_left(self):
         if self.direction == Directions.UP.value:

@@ -13,9 +13,11 @@ def is_valid(row, col):
 def is_destination(row, col, dest: Coordinates):
     return row == dest.x and col == dest.y
 
-## heuristics - using Manhattan Distance, including rotations (cost 0.5 each, not accurate) 
+# heuristics - using Manhattan Distance, including rotations (cost 0.5 each, not accurate) 
 def heuristics(row, col, dir: Directions, dest: Coordinates):
     manhattan_distance = (abs(row - dest.x) + abs(col - dest.y))/25
+    if manhattan_distance == 0:
+        return 0
     rotation = 0
     if col < dest.y:
         rotation += 2
@@ -24,6 +26,7 @@ def heuristics(row, col, dir: Directions, dest: Coordinates):
     elif row > dest.x:
         rotation += 1
     rotation = abs(rotation - dir.value)
+    rotation %= 3
     rotation /= 2
     return manhattan_distance + rotation
 
@@ -59,11 +62,7 @@ def trace_path(cell_details, dest: Coordinates):
 
     # Reverse the path to get the path from source to destination
     path.reverse()
-
-    # Print the path
-    for i in path:
-        print("->", i, end=" ")
-    print()
+    return path
 
 
 def a_star_search(src: Coordinates, dest: Coordinates):
@@ -86,7 +85,6 @@ def a_star_search(src: Coordinates, dest: Coordinates):
     i = src.x
     j = src.y
     dir = src.direction
-    print(i, j, dir)
     i_grid = int(i/25)
     j_grid = int(j/25)
     cell_details[i_grid][j_grid][dir.value].f = 0
@@ -105,6 +103,7 @@ def a_star_search(src: Coordinates, dest: Coordinates):
  
     # Flag for whether destination is found
     found_dest = False
+    print("coordinates:", dest.x, dest.y)
  
     # Main loop of A* search algorithm
     while len(open_list) > 0:
@@ -128,16 +127,23 @@ def a_star_search(src: Coordinates, dest: Coordinates):
                 # If the successor is the destination
                 if is_destination(new_i, new_j, dest):
                     # Set the parent of the destination cell
+                    cell_details[i_grid][j_grid][dir.value].x = new_i
+                    cell_details[i_grid][j_grid][dir.value].y = new_j
+                    cell_details[i_grid][j_grid][dir.value].dir = new_dir
                     cell_details[new_i_grid][new_j_grid][new_dir.value].parent_x = i
                     cell_details[new_i_grid][new_j_grid][new_dir.value].parent_y = j
                     cell_details[new_i_grid][new_j_grid][new_dir.value].parent_dir = dir
                     # Trace and print the path from source to destination
-                    trace_path(cell_details, dest)
+                    result = trace_path(cell_details, dest)
                     found_dest = True
-                    return
+                    return result
                 else:
                     # Calculate the new f, g, and h values
-                    g_new = cell_details[i_grid][j_grid][dir.value].g + 1.0
+                    # g includes type of road
+                    cell_details[i_grid][j_grid][dir.value].x = new_i
+                    cell_details[i_grid][j_grid][dir.value].y = new_j
+                    cell_details[i_grid][j_grid][dir.value].dir = new_dir
+                    g_new = cell_details[i_grid][j_grid][dir.value].g + 1.0 + cell_details[i_grid][j_grid][dir.value].cost
                     h_new = heuristics(new_i, new_j, new_dir, dest)
                     f_new = g_new + h_new
                     # If the cell is not in the open list or the new f value is smaller
@@ -155,6 +161,7 @@ def a_star_search(src: Coordinates, dest: Coordinates):
     # If the destination is not found after visiting all cells
     if not found_dest:
         print("Failed to find the destination cell")
+        return None
 
 def get_succ(x, y, dir: Directions):
     
@@ -180,14 +187,26 @@ def get_succ(x, y, dir: Directions):
     return result
 
 def move_direction(start_coordinates, end_coordinates):
-    if start_coordinates.x > end_coordinates.x and start_coordinates.y == end_coordinates.y:
-        return Directions.LEFT.value
-    if start_coordinates.x < end_coordinates.x and start_coordinates.y == end_coordinates.y:
-        return Directions.RIGHT.value
-    if start_coordinates.x == end_coordinates.x and start_coordinates.y > end_coordinates.y:
-        return Directions.UP.value
-    if start_coordinates.x == end_coordinates.x and start_coordinates.y < end_coordinates.y:
-        return Directions.DOWN.value
+    x = start_coordinates[0]
+    y = start_coordinates[1]
+    dir = start_coordinates[2].value
+
+    x_dest = end_coordinates[0]
+    y_dest = end_coordinates[1]
+    dir_dest = end_coordinates[2].value
+
+    if (x != x_dest) or (y != y_dest):
+        print("move forward!")
+        return 0
+    elif (dir > dir_dest):
+        print("turn left!")
+        return 1
+    elif (dir < dir_dest):
+        print("turn right!")
+        return 2
+    else:
+        return None
+
 '''
 def find_shortest_path(coordinates: Coordinates, houses, target):
     start = (coordinates.x, coordinates.y)
@@ -224,11 +243,11 @@ def get_neighbour(position, direction):
         return position[0] + SQUARE_SIZE, position[1]
 '''
 def calc_rotation(direction):
-    if direction == Directions.UP.value:
+    if direction == Directions.UP:
         return 90
-    elif direction == Directions.DOWN.value:
+    elif direction == Directions.DOWN:
         return 270
-    elif direction == Directions.LEFT.value:
+    elif direction == Directions.LEFT:
         return 180
     else:
         return 0

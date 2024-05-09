@@ -2,11 +2,11 @@ import pygame
 import os
 from coordinates import Coordinates, check_collision, Directions, SQUARE_SIZE, WIDTH, HEIGHT
 import asyncio
-from utils.utils import move_direction, find_shortest_path, get_neighbour, check_flip, calc_rotation, a_star_search
+from utils.utils import move_direction, check_flip, calc_rotation, a_star_search
+from gui.grid_one import GRID_ONE
 
 current_directory = os.getcwd()
 PATH_TO_TRASH_TRUCK_IMAGE = os.path.join(current_directory, "assets", "images", "trash-truck.png")
-
 
 class TrashTruck:
     def __init__(self, size, coordinates: Coordinates):
@@ -39,7 +39,7 @@ class TrashTruck:
                     # print("y: ", self.coordinates.y)
                     break
 
-    async def follow_path(self, houses, drawWindow, target, roads):
+    async def follow_path(self, houses, drawWindow):
         '''
         path = find_shortest_path(self.coordinates, houses, target, roads)
         if path:
@@ -51,9 +51,26 @@ class TrashTruck:
                 await asyncio.sleep(0.075)
                 drawWindow()
         '''
+        count = 1
         for house in houses :
-            a_star_search(self.coordinates, house.coordinates)
-            self.coordinates = house.coordinates
+            print("destination: house", count)
+            path = a_star_search(self.coordinates, house.coordinates)
+            current_place = (self.coordinates.x, self.coordinates.y, self.coordinates.direction)
+            if path:
+                for next_move in path:
+                    move_direction(current_place, next_move)
+                    self.coordinates.x = next_move[0]
+                    self.coordinates.y = next_move[1]
+                    grid_x = int(next_move[0]/25)
+                    grid_y = int(next_move[1]/25)
+                    self.coordinates.direction = Directions(next_move[2])
+                    self.rotation = calc_rotation(self.coordinates.direction)
+                    self.flip = check_flip(self.coordinates.direction)
+                    current_place = next_move
+                    await asyncio.sleep(0.075 * (GRID_ONE[grid_x][grid_y] + 1))
+                    drawWindow()
+            count += 1
+            await asyncio.sleep(0.15)
 
     def draw(self, window):
         if not self.flip:

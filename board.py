@@ -3,8 +3,7 @@ import pygame
 from models.trash_truck import TrashTruck
 from coordinates import Coordinates, Directions
 from models.house import House
-from gui.board_one import draw_road_one
-from gui.board_two import draw_road_two
+from gui.grid_one import GRID_ONE
 
 STARTING_COORDINATES = Coordinates()
 STARTING_COORDINATES.x = 50
@@ -39,6 +38,19 @@ class Board:
             pygame.draw.line(self.WINDOW, LINE_COLOR, (i, 0), (i, HEIGHT))
         for j in range(0, HEIGHT, TRUCK_SIZE[1]):
             pygame.draw.line(self.WINDOW, LINE_COLOR, (0, j), (WIDTH, j))
+        
+        for i in range(32):
+            for j in range(32):
+                colour = (0, 0, 0)
+                match GRID_ONE[i][j]:
+                    case 0:
+                        colour = (64, 64, 64)
+                    case 1:
+                        colour = (128, 128, 128)
+                    case 2:
+                        colour = (139, 69, 19)
+                cell_rect = pygame.Rect(i * 25 + 1, j * 25 + 1, 24, 24)
+                pygame.draw.rect(self.WINDOW, colour, cell_rect)
 
     def draw_objects(self):
         if len(self.houses) == 0:
@@ -52,11 +64,10 @@ class Board:
         pygame.display.update()
 
     def generate_houses(self):
-        for _ in range(random.randint(1, 5)):
-            x = random.randint(0, BLOCK_SIZE) * BLOCK_SIZE
-            y = random.randint(0, BLOCK_SIZE) * BLOCK_SIZE
-            if x <= 50 and y <= 50 or tuple((x, y)) in self.all_roads:
-                continue
+        coordinates = [(5, 12), (7, 12), (12, 9), (15, 10), (16, 25), (17, 27), (14, 16), (24, 3), (25, 5), (26, 10), (5, 26), (6, 7), (3, 14), (14, 28), (30, 24)]
+        for cor in coordinates:
+            x = cor[0] * 25
+            y = cor[1] * 25    
             self.houses.append(House(Coordinates(int(x), int(y))))
 
     async def main(self):
@@ -69,11 +80,7 @@ class Board:
                     run = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        await self.trash_truck.follow_path(self.houses, self.draw_window, (350, 350), self.all_roads)
-                        await self.trash_truck.follow_path(self.houses, self.draw_window, (225, 700), self.all_roads)
-                        await self.trash_truck.follow_path(self.houses, self.draw_window, (750, 150), self.all_roads)
-                        await self.trash_truck.follow_path(self.houses, self.draw_window, (650, 575), self.all_roads)
-                        await self.trash_truck.follow_path(self.houses, self.draw_window, (50, 125), self.all_roads)
+                        await self.trash_truck.follow_path(self.houses, self.draw_window)
 
             keys = pygame.key.get_pressed()
             await self.trash_truck.move(keys, self.houses)

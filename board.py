@@ -3,7 +3,7 @@ import pygame
 from models.trash_truck import TrashTruck
 from coordinates import Coordinates, Directions
 from models.house import House
-from gui.grid_one import GRID_ONE
+from gui.grid_one import get_road_type
 
 STARTING_COORDINATES = Coordinates()
 STARTING_COORDINATES.x = 50
@@ -42,7 +42,8 @@ class Board:
         for i in range(32):
             for j in range(32):
                 colour = (0, 0, 0)
-                match GRID_ONE[i][j]:
+                road = get_road_type(i*25, j*25)
+                match road:
                     case 0:
                         colour = (64, 64, 64)
                     case 1:
@@ -64,7 +65,7 @@ class Board:
         pygame.display.update()
 
     def generate_houses(self):
-        coordinates = [(5, 12), (7, 12), (12, 9), (15, 10), (16, 25), (17, 27), (14, 16), (24, 3), (25, 5), (26, 10), (5, 26), (6, 7), (3, 14), (14, 28), (30, 24)]
+        coordinates = [(5, 12), (8, 12), (12, 9), (15, 10), (16, 25), (17, 27), (14, 16), (24, 3), (25, 5), (26, 10), (5, 26), (6, 7), (8, 18), (14, 28), (30, 24)]
         for cor in coordinates:
             x = cor[0] * 25
             y = cor[1] * 25    

@@ -3,7 +3,7 @@ import os
 from coordinates import Coordinates, check_collision, Directions, SQUARE_SIZE, WIDTH, HEIGHT
 import asyncio
 from utils.utils import move_direction, check_flip, calc_rotation, a_star_search
-from gui.grid_one import GRID_ONE
+from gui.grid_one import get_road_type
 
 current_directory = os.getcwd()
 PATH_TO_TRASH_TRUCK_IMAGE = os.path.join(current_directory, "assets", "images", "trash-truck.png")
@@ -67,7 +67,7 @@ class TrashTruck:
                     self.rotation = calc_rotation(self.coordinates.direction)
                     self.flip = check_flip(self.coordinates.direction)
                     current_place = next_move
-                    await asyncio.sleep(0.075 * (GRID_ONE[grid_x][grid_y] + 1))
+                    await asyncio.sleep(0.075 * (get_road_type(next_move[0], next_move[1]) + 1))
                     drawWindow()
             count += 1
             await asyncio.sleep(0.15)

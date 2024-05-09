@@ -2,6 +2,7 @@ from collections import deque
 import heapq
 from coordinates import Directions, Coordinates
 from models.trash_truck import check_collision, WIDTH, HEIGHT, SQUARE_SIZE
+from gui.grid_one import get_road_type
 
 GRID_SIZE = 32
 
@@ -143,7 +144,7 @@ def a_star_search(src: Coordinates, dest: Coordinates):
                     cell_details[i_grid][j_grid][dir.value].x = new_i
                     cell_details[i_grid][j_grid][dir.value].y = new_j
                     cell_details[i_grid][j_grid][dir.value].dir = new_dir
-                    g_new = cell_details[i_grid][j_grid][dir.value].g + 1.0 + cell_details[i_grid][j_grid][dir.value].cost
+                    g_new = cell_details[i_grid][j_grid][dir.value].g + 1.0 + get_road_type(i, j)
                     h_new = heuristics(new_i, new_j, new_dir, dest)
                     f_new = g_new + h_new
                     # If the cell is not in the open list or the new f value is smaller

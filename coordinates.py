@@ -4,6 +4,11 @@ from gui.grid_one import GRID_ONE
 WIDTH, HEIGHT = 800, 800
 SQUARE_SIZE = 25
 
+class Action(Enum):
+    forward = "forward"
+    left = "turn left"
+    right = "turn right"
+
 class Directions(Enum):
     UP = 0
     DOWN = 2
@@ -11,10 +16,11 @@ class Directions(Enum):
     RIGHT = 3
 
 class Coordinates:
-    def __init__(self, x: int = 0, y: int = 0, direction: Directions = Directions.DOWN):
+    def __init__(self, x: int = 0, y: int = 0, direction: Directions = Directions.DOWN, action = None):
         self.x = x
         self.y = y
         self.direction = direction
+        self.action = action
         self.f = float('inf')  # Total cost of the cell (g + h)
         self.g = float('inf')  # Cost from start to this cell
         self.h = 0  # Heuristic cost from this cell to destination
@@ -54,7 +60,6 @@ class Coordinates:
         elif self.direction == Directions.RIGHT.value and self.x + SQUARE_SIZE < WIDTH:
             return Coordinates(self.x + SQUARE_SIZE, self.y, self.direction)
         return Coordinates(self.x, self.y, self.direction)
-
 
 def check_collision(truck_coordinates: Coordinates, houses):
     for house in houses:

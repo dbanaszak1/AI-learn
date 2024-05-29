@@ -32,42 +32,20 @@ class TrashTruck:
                     self.rotation = calc_rotation(self.coordinates.direction)
                     self.flip = check_flip(self.coordinates.direction)
                     await asyncio.sleep(0.15)
-                    # print("direction: ", self.coordinates.direction)
-                    # print("rotation: ", self.rotation)
-                    # print("flip: ", self.flip)
-                    # print("x: ", self.coordinates.x)
-                    # print("y: ", self.coordinates.y)
                     break
-
+              
     async def follow_path(self, houses, drawWindow):
-        '''
-        path = find_shortest_path(self.coordinates, houses, target, roads)
-        if path:
-            for next_square in path:
-                self.coordinates.direction = move_direction(self.coordinates, Coordinates(next_square[0], next_square[1]))
-                self.rotation = calc_rotation(self.coordinates.direction)
-                self.flip = check_flip(self.coordinates.direction)
-                self.coordinates = Coordinates(next_square[0], next_square[1])
-                await asyncio.sleep(0.075)
-                drawWindow()
-        '''
         count = 1
         for house in houses :
             print("destination: house", count)
             path = a_star_search(self.coordinates, house.coordinates)
-            current_place = (self.coordinates.x, self.coordinates.y, self.coordinates.direction)
             if path:
                 for next_move in path:
-                    move_direction(current_place, next_move)
-                    self.coordinates.x = next_move[0]
-                    self.coordinates.y = next_move[1]
-                    grid_x = int(next_move[0]/25)
-                    grid_y = int(next_move[1]/25)
-                    self.coordinates.direction = Directions(next_move[2])
+                    self.coordinates = move_direction(self.coordinates, next_move)
                     self.rotation = calc_rotation(self.coordinates.direction)
                     self.flip = check_flip(self.coordinates.direction)
                     current_place = next_move
-                    await asyncio.sleep(0.075 * (get_road_type(next_move[0], next_move[1]) + 1))
+                    await asyncio.sleep(0.075)
                     drawWindow()
             count += 1
             await asyncio.sleep(0.15)

@@ -133,10 +133,12 @@ def a_star_search(src: Coordinates, dest: Coordinates):
                     g_new += g_old
                     h_new = heuristics(new_i, new_j, new_dir, dest)
                     f_new = g_new + h_new
+                    '''
                     print(new_i_grid, new_j_grid, new_dir)
                     print("parent:", i_grid, j_grid, dir, "g:", g_old)
                     print("g value:", g_new)
                     print("f value:", f_new)
+                    '''
                     # If the cell is not in the open list or the new f value is smaller
                     if cell_details[new_i_grid][new_j_grid][new_dir.value].f == float('inf') or cell_details[new_i_grid][new_j_grid][new_dir.value].f > f_new:
                         # Add the cell to the open list
